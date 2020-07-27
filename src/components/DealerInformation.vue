@@ -1,20 +1,36 @@
 <template>
   <div class="content">
-    <el-card>
+    <el-card v-for="(item, index) in map" :key="index" class="dealerInformation">
       <el-row>
         <el-col :sm="24">
-          <div class="name">
-            <img src="../assets/img/name@2x.png" alt="">
-            <span>您的服務經銷商為：</span>
-          </div>
+          <el-row>
+              <el-col :sm="24" :md="24" :lg="24" class="dealerInformation_header">
+                <img class="dealerInformation_header_img" :src="item.imgs" alt="" />
+                <div class="dealerInformation_header_box">
+                  <h2>{{item.names}}<em v-if="item.status">{{item.status}}</em></h2>
+                  <p>型號：{{item.model}}</p>
+                  <p>製號：{{item.SystemNumber}}</p>
+                  <p>安裝地址：{{item.adds}}</p>
+                </div>
+                <div class="dealerInformation_header_button">編輯</div>
+              </el-col>
+              <el-col :sm="24" :md="24" :lg="24" class="dealerInformation_bottom">
+                <div class="dealerInformation_header_box">
+                  <h2>{{item.names}}<em v-if="item.status">{{item.status}}</em></h2>
+                  <p>型號：{{item.model}}</p>
+                  <p>製號：{{item.SystemNumber}}</p>
+                  <p>安裝地址：{{item.adds}}</p>
+                </div>
+              </el-col>
+          </el-row>
         </el-col>
-        <!-- <el-col :sm="24">
+        <el-col :sm="24">
           <div class="information">
             <el-row>
               <el-col :sm="24" :md="11" :lg="11">
                 <div class="text">
-                  <h1>{{map.Name}}店</h1>
-                  <span>Water Purifier Store Fengjia Store</span>
+                  <h1>{{item.Name}}店</h1>
+                  <span>{{item.PHPCustId}}</span>
                 </div>
               </el-col>
               <el-col :sm="24" :md="24" :lg="13">
@@ -22,7 +38,7 @@
                   <el-col :sm="16" :lg="18">
                     <span class="title">門店地址</span>
                     <div class="text">
-                      <p class="span_1">{{map.Address}}</p>
+                      <p class="span_1">{{item.Address}}</p>
                       <span class="ico" @click="$router.push({ path: '/map', query: { Address: map.Address } })">
                         <i class="mcicon-1"></i>
                         查看地址
@@ -31,50 +47,15 @@
                   </el-col>
                   <el-col :sm="8" :lg="6">
                     <span class="title">聯繫電話</span>
-                    <p class="span_1">{{map.Tel}}</p>
+                    <p class="span_1">{{item.Mobile}}</p>
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
           </div>
-        </el-col> -->
-
-        <el-col :sm="24" class="h-scroll" v-if="map" :class="{'w-md':  map.length>= 3,'w-xs':map.length>= 2 }">
-          <vue-scroll :ops="ops">
-            <div class="information" v-for="(item,index) in map" :key="index">
-              <el-row>
-                <el-col :sm="24" :md="11" :lg="11">
-                  <div class="text">
-                    <h1>{{item.Name}}店</h1>
-                    <span>產品型號：{{item.ModelName}}</span>
-                  </div>
-                </el-col>
-                <el-col :sm="24" :md="24" :lg="13">
-                  <el-row class="info">
-                    <el-col :sm="16" :lg="18">
-                      <span class="title">門店地址</span>
-                      <div class="text">
-                        <p class="span_1">{{item.Address}}</p>
-                        <span class="ico" @click="$router.push({ path: '/map', query: { Address: item.Address } })">
-                          <i class="mcicon-1"></i>
-                          查看地址
-                        </span>
-                      </div>
-                    </el-col>
-                    <el-col :sm="8" :lg="6" class="m-b">
-                      <span class="title">聯繫電話</span>
-                      <p class="span_1">{{item.Tel}}</p>
-                    </el-col>
-                  </el-row>
-                </el-col>
-              </el-row>
-            </div>
-          </vue-scroll>
         </el-col>
       </el-row>
-
     </el-card>
-
   </div>
 </template>
 
@@ -90,38 +71,32 @@ export default {
     return {
       CustId: '',
       map: [
-        // {
-        //   CRMId: '099a511f-8518-e911-8156-005056af7974',
-        //   PHPCustId: 'FAK013',
-        //   Name: '八方',
-        //   Mobile: '0938710668',
-        //   Tel: '038320518',
-        //   Address: '花蓮縣花蓮市中山路214號'
-        // },
-        // {
-        //   CRMId: '099a511f-8518-e911-8156-005056af7974',
-        //   PHPCustId: 'FAK013',
-        //   Name: '八方',
-        //   Mobile: '0938710668',
-        //   Tel: '038320518',
-        //   Address: '花蓮縣花蓮市中山路214號'
-        // },
-        // {
-        //   CRMId: '099a511f-8518-e911-8156-005056af7974',
-        //   PHPCustId: 'FAK013',
-        //   Name: '八方',
-        //   Mobile: '0938710668',
-        //   Tel: '038320518',
-        //   Address: '花蓮縣花蓮市中山路214號'
-        // },
-        // {
-        //   CRMId: '099a511f-8518-e911-8156-005056af7974',
-        //   PHPCustId: 'FAK013',
-        //   Name: '八方',
-        //   Mobile: '0938710668',
-        //   Tel: '038320518',
-        //   Address: '花蓮縣花蓮市中山路214號'
-        // }
+        {
+          imgs: require('@/assets/imgs/WaterPurifier1.png'),
+          names: '標準型RO淨水器',
+          model: 'P0220',
+          SystemNumber: 'XIN9123IQ',
+          adds: '436台中市雅潭路236號5樓',
+          status: '廚房',
+          CRMId: '099a511f-8518-e911-8156-005056af7974',
+          PHPCustId: 'Water Purifier Store Fengjia Store',
+          Name: '淨水器專賣店 逢甲',
+          Mobile: '0938-710-668',
+          Address: '花蓮縣花蓮市中山路214號'
+        },
+        {
+          imgs: require('@/assets/imgs/WaterPurifier2.png'),
+          model: 'P0220',
+          names: 'RO 淨水器',
+          SystemNumber: 'XIN9123IQ',
+          adds: '436台中市雅潭路236號5樓',
+          status: '客廳',
+          CRMId: '099a511f-8518-e911-8156-005056af7974',
+          PHPCustId: 'Water Purifier Store Fengjia Store',
+          Name: '淨水器專賣店 逢甲',
+          Mobile: '0938-710-668',
+          Address: '花蓮縣花蓮市中山路214號'
+        }
       ],
       ops: {
         vuescroll: {},
@@ -141,15 +116,12 @@ export default {
           onlyShowBarOnScroll: false, // 是否只有滚动的时候才显示滚动条
           background: '#E6E6E6' // 颜色
         }
-
       }
     }
   },
   mounted () {
-    this.CustId = storage.getItem('userName')
-    this.CustId = this.CustId.CustId
-    // console.log(this.CustId)
-    this._getMaintenanceDistributionByCustId()
+    this.CustId = storage.getItem('userName').CustId
+    // this._getMaintenanceDistributionByCustId()
   },
   methods: {
     _getMaintenanceDistributionByCustId () {
@@ -173,6 +145,61 @@ export default {
 
 <style scoped lang="scss">
 .content {
+  .dealerInformation {
+    margin-bottom: 2rem;
+    .dealerInformation_header {
+      margin-bottom: 4.5rem;
+      display: flex;
+      justify-content: space-between;
+      .dealerInformation_header_img {
+        width: 10rem;
+        height: 10rem;
+      }
+      .dealerInformation_header_box {
+        width: calc(100% - 21.8rem);
+        padding-left: 1.8rem;
+        h2 {
+          margin-bottom: 0.6rem;
+          font-size:2rem;
+          font-weight:500;
+          color:rgba(31,182,237,1);
+          line-height:2.8rem;
+          em {
+            margin-left: 0.6rem;
+            display: inline-block;
+            padding: 0.4rem 0.7rem;
+            background:rgba(233,99,67,1);
+            border-radius:3px;
+            font-size:1rem;
+            color:rgba(255,255,255,1);
+            text-align: center;
+            line-height:1.2rem;
+          }
+        }
+        p {
+          font-size:1.3rem;
+          color:rgba(134,134,134,1);
+          line-height:2.1rem;
+        }
+      }
+      .dealerInformation_header_button {
+        width:11.8rem;
+        height:4.6rem;
+        background:rgba(226,247,255,1);
+        box-shadow:0px 1.2rem 3rem 0px rgba(1,181,240,0.1);
+        border-radius: 0.6rem;
+        border:2px solid rgba(31,182,237,1);
+        font-size:1.4rem;
+        font-weight:500;
+        color:rgba(31,182,237,1);
+        line-height:4.6rem;
+        text-align: center;
+      }
+    }
+    .dealerInformation_bottom {
+      display: none;
+    }
+  }
   .el-card {
     border-radius: 1rem;
     .name {
@@ -267,6 +294,46 @@ export default {
     }
     .m-b {
       margin-bottom: 1rem;
+    }
+    .dealerInformation {
+      .dealerInformation_header {
+        padding: 1rem 1rem 0 1rem;
+        margin-bottom: 1rem;
+        .dealerInformation_header_box {
+          display: none;
+        }
+      }
+      .dealerInformation_bottom {
+        padding: 1rem 1rem 0 1rem;
+        margin-bottom: 2.5rem;
+        display: block;
+        .dealerInformation_header_box {
+          width: 100%;
+          h2 {
+            margin-bottom: 0.6rem;
+            font-size:2rem;
+            font-weight:500;
+            color:rgba(31,182,237,1);
+            line-height:2.8rem;
+            em {
+              margin-left: 0.6rem;
+              display: inline-block;
+              padding: 0.4rem 0.7rem;
+              background:rgba(233,99,67,1);
+              border-radius:3px;
+              font-size:1rem;
+              color:rgba(255,255,255,1);
+              text-align: center;
+              line-height:1.2rem;
+            }
+          }
+          p {
+            font-size:1.3rem;
+            color:rgba(134,134,134,1);
+            line-height:2.1rem;
+          }
+        }
+      }
     }
 }
 }

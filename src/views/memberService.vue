@@ -6,18 +6,18 @@
     </div>
     <dealer-information :map="map"></dealer-information>
     <el-row :gutter="15">
-      <el-col :md="8">
+      <el-col :md="6">
         <div @click="clickTheQuery">
           <el-card class="card-2">
             <span></span>
             <div class="name">
-              <h1>點數查詢</h1>
-              <p>Point inquiry</p>
+              <h1>櫻花點數商城</h1>
+              <p>Points Mall</p>
             </div>
           </el-card>
         </div>
       </el-col>
-      <el-col :md="8">
+      <el-col :md="6">
          <div @click="clickServiceApply()">
           <el-card class="card-3">
               <span></span>
@@ -28,13 +28,24 @@
           </el-card>
          </div>
       </el-col>
-      <el-col :md="8">
+      <el-col :md="6">
         <div @click="clickPersonalInformation">
           <el-card class="card-4">
             <span></span>
             <div class="name">
               <h1>個人資訊</h1>
               <p>Personal information</p>
+            </div>
+          </el-card>
+        </div>
+      </el-col>
+      <el-col :md="6">
+        <div @click="toMemberBenefits()">
+          <el-card class="card-1">
+            <span></span>
+            <div class="name">
+              <h1>會員權益</h1>
+              <p>member benefits</p>
             </div>
           </el-card>
         </div>
@@ -85,6 +96,10 @@ export default {
         this.isShowLoadging = false
       })
     },
+    // 前往會員權益
+    toMemberBenefits () {
+      this.$router.push({ name: 'MemberBenefits' })
+    },
     clickTheQuery () {
       this.$router.push({ name: 'theQuery' })
       // console.log(this.$router)
@@ -130,18 +145,19 @@ export default {
   .el-row {
     margin-top: 2rem;
     .el-card {
-      max-height: 18.7rem;
+      // max-height: 18.7rem;
       padding: 1rem 0;
       border-radius: 1rem;
       /deep/ .el-card__body {
-         @include flex()
+         @include flex();
+         padding: 1rem 0.6rem;
       }
       cursor: pointer;
       .name {
-        margin-left: 1.6rem;
+        margin-left: 1rem;
         h1 {
           line-height: 2.5rem;
-          font-size: 1.8rem;
+          font-size: 1.5rem;
           font-weight: 700;
           color: #3D3D3D;
         }
@@ -154,17 +170,22 @@ export default {
     }
     .card-2 {
       span {
-        @include bgImg(3.3rem,3.8rem, '../assets/img/service_2@2x.png',3.3rem)
+        @include bgImg(3rem,3rem, '../assets/imgs/shoppingCart.png',3rem)
       }
     }
     .card-3 {
       span {
-        @include bgImg(3.7rem,3.8rem, '../assets/img/service_3@2x.png',3.7rem)
+        @include bgImg(3rem,3rem, '../assets/imgs/ServiceApplication.png',3rem)
       }
     }
     .card-4 {
       span {
-        @include bgImg(3.7rem,3.8rem, '../assets/img/personal@2x.png',3.7rem)
+        @include bgImg(3rem,3rem, '../assets/imgs/PersonalInformation.png',3rem)
+      }
+    }
+    .card-1 {
+      span {
+        @include bgImg(3rem,3rem, '../assets/imgs/memberBenefits.png',3rem)
       }
     }
   }
@@ -203,13 +224,13 @@ export default {
   .el-row{
     .el-card {
       margin-bottom: 1.5rem;
+      .name {
+        width: 15rem;
+      }
     }
     .card-2 {
      /deep/ .el-card__body {
         padding-left: 0;
-      }
-      .name {
-        width: 8rem;
       }
     }
   }

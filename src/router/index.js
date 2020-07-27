@@ -79,6 +79,30 @@ const routes = [
         }
       },
       {
+        path: 'MemberBenefits', // 會員權益
+        name: 'MemberBenefits',
+        component: () => import('@/views/Member/MemberBenefits'),
+        meta: {
+          keepAlive: true
+        }
+      },
+      {
+        path: 'SetPoint', // 如何集點
+        name: 'SetPoint',
+        component: () => import('@/views/Member/SetPoint'),
+        meta: {
+          keepAlive: true
+        }
+      },
+      {
+        path: 'ReferralCode', // 推薦碼
+        name: 'ReferralCode',
+        component: () => import('@/views/Member/ReferralCode'),
+        meta: {
+          keepAlive: true
+        }
+      },
+      {
         path: 'theQuery', // 點數
         name: 'theQuery',
         component: () => import('@/views/theQuery'),

@@ -31,7 +31,10 @@
                   </el-col>
                   <el-col :sm="6" >
                     <span class="title">聯繫電話</span>
-                    <p class="span_1">{{list.Tel}}</p>
+                    <!-- <p class="span_1">{{list.Tel}}</p> -->
+                    <p class="span_1">
+                      <a :href="'tel:+' + list.Tel">{{list.Tel}}</a>
+                    </p>
                   </el-col>
                 </el-row>
               </el-col>

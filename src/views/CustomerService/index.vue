@@ -2,7 +2,7 @@
   <div class="content"  ref="contents">
     <nav-head :scrollTo="scrollTo" :mt="mt"></nav-head>
     <div class="column container">
-      <el-row  v-if="$route.meta.showPersonal">
+      <el-row class="columns" v-if="$route.meta.showPersonal">
         <el-col :xs="24" :sm="24">
           <!-- 這裡是會被緩存的視圖組件 -->
           <keep-alive>
@@ -136,7 +136,7 @@ body,
   background-color:#F5F2F5!important;overflow-x:hidden;background:url('./../../assets/img/body_bg.png') no-repeat top;
   .column {
     margin-top: 13rem;
-    .el-row {
+    .columns {
       .el-col:last-of-type {
         padding-left: 3rem;
       }

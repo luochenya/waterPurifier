@@ -21,7 +21,10 @@
         </div>
          <div class="item_2">
           <span>聯繫電話</span>
-          <p>{{maintenanceDistribution.Tel}}</p>
+          <p>
+            <a :href="'tel:+' + maintenanceDistribution.Tel">{{maintenanceDistribution.Tel}}</a>
+          </p>
+          <!-- <p>{{maintenanceDistribution.Tel}}</p> -->
         </div>
          <div class="btn" @click="toShopClick" ref="refBtn">
           到店取貨服務

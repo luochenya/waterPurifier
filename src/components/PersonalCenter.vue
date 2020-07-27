@@ -12,12 +12,21 @@
     </div>
     <div class="txt-name">{{userName.CustName}}</div>
       <!-- <h3 class="txt-title">消費者會員代號：A05541</h3> -->
-      <div class="btn">
+      <!-- <div class="btn">
         <i class="mcicon-3"></i>
         {{userName.Mobile}}
-      </div>
+      </div> -->
   </div>
   <div class="list">
+      <el-card>
+          <div class="list-item">
+            <img src="./../assets/img/icon_phone.png" alt="">
+            <div class="item-site">
+              <span>電話號碼</span>
+              <p>{{userName.Mobile}}</p>
+            </div>
+          </div>
+      </el-card>
       <el-card>
           <div class="list-item">
             <img src="./../assets/img/icon_wuzi.png" alt="">
@@ -42,7 +51,8 @@
       </el-card>
       <el-card v-if="userName.LineBinding">
           <div class="list-item">
-            <img src="./../assets/img/icon_fanhui.png" alt="">
+            <img src="./../assets/img/icon_fanhui.png" alt="" v-if="userName.ShareCode">
+            <img src="./../assets/img/icon_fanhui2.png" alt="" v-else>
             <div class="item-site">
               <span>我的推薦碼</span>
               <p>{{userName.ShareCode}}</p>

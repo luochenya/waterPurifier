@@ -29,6 +29,26 @@
         </el-row>
       </div>
     </el-card>
+    <div v-if="confirmStatus" class="confirmPopup">
+      <el-dialog
+      :visible.sync="confirmStatus"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
+      :modal="false">
+        <div class="content">
+          <div class="imgs">
+            <img src="../components/PopUp/img/update@2x (1).png" alt="" />
+          </div>
+          <slot name="body"></slot>
+          <h1>您確定要更新此型號<em>{{ FilterModel }}</em>的濾心嗎？</h1>
+          <div class="btn_1">
+            <div @click="confirm">確認更換</div>
+            <div @click="confirmStatus = false">取消動作</div>
+          </div>
+        </div>
+      </el-dialog>
+    </div>
     <upload-pop-up v-if="isShowUpload" :pLeft="pTot" :pBottom="pRight" :btn="Uploadbtn"></upload-pop-up>
     <guide-tow :isDialogShow="isShowGuideTow" modyType="4" :noShowClick="isGuideTwoClick"></guide-tow>
     <guide-tow :isDialogShow="isShowGuideError" modyType="5" :noShowClick="isGuideErrorClick"></guide-tow>
@@ -68,6 +88,8 @@ export default {
   },
   data () {
     return {
+      FilterModel: '',
+      confirmStatus: false,
       isShowLoadging: true,
       fileCode: '',
       isShowUpload: false,
@@ -208,24 +230,29 @@ export default {
         return
       }
       if (this.fileCode.length > 12 && this.fileCode.length <= 14) {
-        this.isShowLoadging = true
-        getUpdateROFilter({
-          ProductId: this.CustProdId,
-          Sequence: this.Sequence,
-          Mfno: this.fileCode
-        }).then(res => {
-          if (res.status === 200 && res.data.State) {
-            this.isShowLoadging = false
-            this.isShowGuideTow = true
-          } else {
-            this.isShowLoadging = false
-            this.text = res.data.Data
-            this.isShowGuideCodeNo = true
-          }
-        })
+        this.FilterModel = this.toViewDetails.FilterName
+        this.confirmStatus = true
       } else {
         this.isShowGuideMun = true
       }
+    },
+    confirm () {
+      this.isShowLoadging = true
+      this.confirmStatus = false
+      getUpdateROFilter({
+        ProductId: this.CustProdId,
+        Sequence: this.Sequence,
+        Mfno: this.fileCode
+      }).then(res => {
+        if (res.status === 200 && res.data.State) {
+          this.isShowLoadging = false
+          this.isShowGuideTow = true
+        } else {
+          this.isShowLoadging = false
+          this.text = res.data.Data
+          this.isShowGuideCodeNo = true
+        }
+      })
     },
     isGuideTwoClick () {
       this.isShowGuideTow = false
@@ -249,7 +276,77 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+
+.confirmPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  overflow: hidden;
+  webkit-overflow: hidden;
+  background-color:rgba(0, 0, 0, .6);
+  /deep/ .el-dialog__wrapper{
+  //  webkit-z-index: 9996!important;
+  //  overflow: hidden;
+  //  webkit-overflow: hidden;
+  }
+  /deep/ .el-dialog {
+    // z-index: 9999!important;
+    width: 40rem;
+    border-radius: 1.4rem!important;
+    /deep/ .el-dialog__body {
+      padding: 0;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 2.5rem;
+      .imgs {
+        display: flex;
+        justify-content: center;
+        width: 9rem;
+        height: 8rem;
+        img {
+          height: 8rem;
+        }
+      }
+      h1 {
+        text-align: center;
+        margin-top: 1.5rem;
+        line-height: 3rem;
+        font-size: 2.2rem;
+        color: rgba(134, 134, 134, 1);
+        font-weight: 500;
+        em {
+          color: #3d3d3d;
+          font-weight: bold;
+        }
+      }
+      .btn_1 {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-around;
+        div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 2rem 4rem;
+          margin-top: 4rem;
+          background: rgba(31, 182, 237, 1);
+          border-radius: .6rem;
+          font-size: 1.4rem;
+          color: rgba(255, 255, 255, 1);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
 .to-upload {
   .el-card {
     border-radius: 1rem;
@@ -382,6 +479,76 @@ export default {
   }
 }
 @media screen and (max-width: 768px) {
+.confirmPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  overflow: hidden;
+  webkit-overflow: hidden;
+  background-color:rgba(0, 0, 0, .6);
+  /deep/ .el-dialog__wrapper{
+  //  webkit-z-index: 9996!important;
+  //  overflow: hidden;
+  //  webkit-overflow: hidden;
+  }
+  /deep/ .el-dialog {
+    // z-index: 9999!important;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 1.4rem!important;
+    /deep/ .el-dialog__body {
+      padding: 0;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 2.5rem;
+      .imgs {
+        display: flex;
+        justify-content: center;
+        width: 9rem;
+        height: 8rem;
+        img {
+          height: 8rem;
+        }
+      }
+      h1 {
+        text-align: center;
+        margin-top: 1.5rem;
+        line-height: 3rem;
+        font-size: 1.8rem;
+        color: rgba(134, 134, 134, 1);
+        font-weight: 500;
+        em {
+          color: #3d3d3d;
+          font-weight: bold;
+        }
+      }
+      .btn_1 {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-around;
+        div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 1rem 2rem;
+          margin-top: 3rem;
+          background: rgba(31, 182, 237, 1);
+          border-radius: .6rem;
+          font-size: 1.4rem;
+          color: rgba(255, 255, 255, 1);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
   .el-col:nth-of-type(2) {
    padding-left: 1rem;
     margin-top: 3rem

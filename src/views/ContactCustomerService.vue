@@ -16,7 +16,8 @@
         <el-col :span="24">
           <div class="left_text">
             <i class="mcicon-3"></i>
-            <span>0909-611-818</span>
+            <!-- <span>0909-611-818</span> -->
+            <span><a href="tel:+0909-611-818">0909-611-818</a></span>
           </div>
           <div class="btn" @click="$router.push({ name: 'SearchProducts' })">返回我的產品列表</div>
         </el-col>
