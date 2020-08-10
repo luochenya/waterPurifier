@@ -18,15 +18,15 @@
         </div>
       </el-col>
       <el-col :md="6">
-         <div @click="clickServiceApply()">
+        <div @click="clickServiceApply()">
           <el-card class="card-3">
-              <span></span>
-              <div class="name">
-                <h1>服務申請</h1>
-                <p>Service application</p>
-              </div>
+            <span></span>
+            <div class="name">
+              <h1>服務申請</h1>
+              <p>Service application</p>
+            </div>
           </el-card>
-         </div>
+        </div>
       </el-col>
       <el-col :md="6">
         <div @click="clickPersonalInformation">
@@ -52,80 +52,86 @@
       </el-col>
     </el-row>
     <!-- <div class="btn" @click="clickExit">登出</div> -->
-    <guide-four :isDialogShow="isShowFour" :exit="true" :confirmClick="confirmClick" :noClick="noClick"></guide-four>
-     <Loading :show="isShowLoadging"></Loading>
- </div>
+    <guide-four
+      :isDialogShow="isShowFour"
+      :exit="true"
+      :confirmClick="confirmClick"
+      :noClick="noClick"
+    ></guide-four>
+    <Loading :show="isShowLoadging"></Loading>
+  </div>
 </template>
 
 <script>
-import DealerInformation from '@/components/DealerInformation'
-import GuideFour from '@/components/PopUp/Guide_4'
-import { getMaintenanceDistribution } from './../api/api'
-import storage from './../storage'
+import DealerInformation from "@/components/DealerInformation";
+import GuideFour from "@/components/PopUp/Guide_4";
+import { getMaintenanceDistribution } from "./../api/api";
+import storage from "./../storage";
 // import ConsentForm from './ConsentForm'
 export default {
-  name: 'menber-service',
+  name: "menber-service",
   components: {
     DealerInformation,
     GuideFour
     // ConsentForm
   },
-  data () {
+  data() {
     return {
-      isShowLoadging: true,
+      isShowLoadging: false,
       isShowFour: false,
-      ProductId: '',
+      ProductId: "",
       map: {},
       userName: {}
-    }
+    };
   },
-  mounted () {
-    this.ProductId = storage.getItem('CustProdId')
+  mounted() {
+    this.ProductId = storage.getItem("CustProdId");
     if (this.ProductId) {
-      this._getMaintenanceDistribution()
+      this._getMaintenanceDistribution();
     }
-    this.userName = storage.getItem('userName')
+    this.userName = storage.getItem("userName");
   },
   methods: {
-    _getMaintenanceDistribution () {
-      const { ProductId } = this
+    _getMaintenanceDistribution() {
+      this.isShowLoadging = true;
+      const { ProductId } = this;
       getMaintenanceDistribution({
         ProductId
       }).then(res => {
-        this.map = res.data.Data
-        this.isShowLoadging = false
-      })
+        this.map = res.data.Data;
+        this.isShowLoadging = false;
+      });
     },
     // 前往會員權益
-    toMemberBenefits () {
-      this.$router.push({ name: 'MemberBenefits' })
+    toMemberBenefits() {
+      this.$router.push({ name: "MemberBenefits" });
     },
-    clickTheQuery () {
-      this.$router.push({ name: 'theQuery' })
+    clickTheQuery() {
+      this.$router.push({ name: "theQuery" });
       // console.log(this.$router)
     },
-    clickServiceApply () {
-      const base64 = btoa(this.userName.CustId)
-      window.location.href = `https://service.sakura.com.tw/service.aspx?custId=${base64}`
+    clickServiceApply() {
+      const base64 = btoa(this.userName.CustId);
+      window.location.href = `https://service.sakura.com.tw/service.aspx?custId=${base64}`;
     },
-    clickPersonalInformation () {
-      this.$router.push({ name: 'personalInformation' })
+    clickPersonalInformation() {
+      this.$router.push({ name: "personalInformation" });
     },
-    clickExit () {
-      this.isShowFour = true
+    clickExit() {
+      this.isShowFour = true;
     },
-    confirmClick () {
-      this.$router.push({ name: 'Login' })
+    confirmClick() {
+      this.$router.push({ name: "Login" });
     },
-    noClick () {
-      this.isShowFour = false
+    noClick() {
+      this.isShowFour = false;
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
-@import '../assets/styles/mixin.scss';
+@import "../assets/styles/mixin.scss";
 .contents {
   .title {
     margin-bottom: 4rem;
@@ -149,8 +155,8 @@ export default {
       padding: 1rem 0;
       border-radius: 1rem;
       /deep/ .el-card__body {
-         @include flex();
-         padding: 1rem 0.6rem;
+        @include flex();
+        padding: 1rem 0.6rem;
       }
       cursor: pointer;
       .name {
@@ -159,33 +165,43 @@ export default {
           line-height: 2.5rem;
           font-size: 1.5rem;
           font-weight: 700;
-          color: #3D3D3D;
+          color: #3d3d3d;
         }
-        p{
+        p {
           line-height: 1.4rem;
           font-size: 1rem;
-          color: #BDBDBD;
+          color: #bdbdbd;
         }
       }
     }
     .card-2 {
       span {
-        @include bgImg(3rem,3rem, '../assets/imgs/shoppingCart.png',3rem)
+        @include bgImg(3rem, 3rem, "../assets/imgs/shoppingCart.png", 3rem);
       }
     }
     .card-3 {
       span {
-        @include bgImg(3rem,3rem, '../assets/imgs/ServiceApplication.png',3rem)
+        @include bgImg(
+          3rem,
+          3rem,
+          "../assets/imgs/ServiceApplication.png",
+          3rem
+        );
       }
     }
     .card-4 {
       span {
-        @include bgImg(3rem,3rem, '../assets/imgs/PersonalInformation.png',3rem)
+        @include bgImg(
+          3rem,
+          3rem,
+          "../assets/imgs/PersonalInformation.png",
+          3rem
+        );
       }
     }
     .card-1 {
       span {
-        @include bgImg(3rem,3rem, '../assets/imgs/memberBenefits.png',3rem)
+        @include bgImg(3rem, 3rem, "../assets/imgs/memberBenefits.png", 3rem);
       }
     }
   }
@@ -199,41 +215,41 @@ export default {
     font-size: 1.6rem;
     font-weight: 700;
     color: #fff;
-    background: #1FB6ED;
-    border-radius: .6rem;
+    background: #1fb6ed;
+    border-radius: 0.6rem;
     cursor: pointer;
   }
-@media screen and (min-width:992px) and (max-width:1200px) {
+  @media screen and (min-width: 992px) and (max-width: 1200px) {
     .el-row {
       .el-card {
         height: 11.1rem;
         display: flex;
         align-items: center;
         // padding-left: 1rem;
-      /deep/ .el-card__body {
-        margin-left: 1rem;
-        padding: 1.4rem;
-      }
-      .name {
-        margin-left: .8rem;
-      }
-    }
-  }
-}
-@media screen and (max-width: 991px) {
-  .el-row{
-    .el-card {
-      margin-bottom: 1.5rem;
-      .name {
-        width: 15rem;
-      }
-    }
-    .card-2 {
-     /deep/ .el-card__body {
-        padding-left: 0;
+        /deep/ .el-card__body {
+          margin-left: 1rem;
+          padding: 1.4rem;
+        }
+        .name {
+          margin-left: 0.8rem;
+        }
       }
     }
   }
-}
+  @media screen and (max-width: 991px) {
+    .el-row {
+      .el-card {
+        margin-bottom: 1.5rem;
+        .name {
+          width: 15rem;
+        }
+      }
+      .card-2 {
+        /deep/ .el-card__body {
+          padding-left: 0;
+        }
+      }
+    }
+  }
 }
 </style>

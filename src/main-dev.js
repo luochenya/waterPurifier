@@ -3,7 +3,24 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 
-import { Row, Col, Card, Select, Option, Footer, Dialog, Pagination, Input, Form, FormItem, Message, Button } from 'element-ui'
+import {
+  Row,
+  Col,
+  Card,
+  Select,
+  Option,
+  Footer,
+  Dialog,
+  Pagination,
+  Input,
+  Form,
+  FormItem,
+  Message,
+  Button,
+  DatePicker,
+  TimeSelect,
+  TimePicker,
+} from 'element-ui'
 import VueCropper from 'vue-cropper'
 
 import './assets/styles/index.scss'
@@ -21,6 +38,10 @@ import VueLazyload from 'vue-lazyload'
 import Loading from './components/Loading.vue'
 // 全局过滤器
 import filters from '@/util'
+
+import 'swiper/css/swiper.css'
+import vueAwesomeSwiper from "vue-awesome-swiper";
+Vue.use(vueAwesomeSwiper /* { default global options } */ );
 
 Vue.component('Loading', Loading)
 Vue.use(VueLazyload, {
@@ -61,6 +82,9 @@ Vue.use(Dialog)
 Vue.use(Pagination)
 Vue.use(Input)
 Vue.use(Button)
+Vue.use(DatePicker)
+Vue.use(TimeSelect)
+Vue.use(TimePicker)
 Vue.use(Form)
 Vue.use(FormItem) // 引入插件
 // 解决移动端点击延迟200ms的问题
@@ -73,9 +97,11 @@ if ('addEventListener' in document) {
 
 // 弹出框禁止滑动
 Vue.prototype.noScroll = function () {
-  const mo = function (e) { e.preventDefault() }
+  const mo = function (e) {
+    e.preventDefault()
+  }
   document.body.style.overflow = 'hidden'
-  document.addEventListener('touchmove', mo, false)// 禁止页面滑动
+  document.addEventListener('touchmove', mo, false) // 禁止页面滑动
 }
 
 // 弹出框可以滑动
