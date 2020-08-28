@@ -1,14 +1,10 @@
 <template>
   <div class="registered">
     <!-- 顶部logo -->
-    <img
-      class="registered_loginLogo"
-      src="@/assets/imgs/loginLogo.png"
-      alt=""
-    />
+    <img class="registered_loginLogo" src="@/assets/imgs/loginLogo.png" alt />
     <!-- 提示语 -->
     <p class="registered_title">
-      <img src="@/assets/imgs/caveat.png" alt="" />
+      <img src="@/assets/imgs/caveat.png" alt />
       您尚未成為櫻花好友，請填寫下方資料註冊
     </p>
     <!-- 中间内容 -->
@@ -16,23 +12,27 @@
       <img
         class="registered_box_img"
         src="@/assets/imgs/loginLogoSmall.png"
-        alt=""
+        alt
       />
       <h1 class="registered_box_h1">
-        <img src="@/assets/imgs/PhoneVerification.png" alt="" />
+        <img src="@/assets/imgs/PhoneVerification.png" alt />
         <span>建立您的櫻花好友</span>
-        <img src="@/assets/imgs/PhoneVerification.png" alt="" />
+        <img src="@/assets/imgs/PhoneVerification.png" alt />
       </h1>
       <div class="registered_box_content">
         <!-- 姓名输入框 -->
         <div class="registered_box_content_input">
           <p>姓名</p>
-          <el-input v-model="name" placeholder="請輸入姓名"></el-input>
+          <el-input v-model="CustName" placeholder="請輸入姓名"></el-input>
         </div>
         <!-- 手機號碼输入框 -->
         <div class="registered_box_content_input">
           <p>手機號碼</p>
-          <el-input v-model="phone" placeholder="請輸入手機號碼"></el-input>
+          <el-input
+            disabled
+            v-model="CustMobile"
+            placeholder="請輸入手機號碼"
+          ></el-input>
         </div>
       </div>
       <div class="registered_box_addr">
@@ -43,27 +43,29 @@
         <!-- 縣市地區选择框 -->
         <div class="registered_box_content_select">
           <p>縣市地區</p>
-          <el-select v-model="arrds" placeholder="請選擇">
+          <el-select
+            v-model="CustAddrCityId"
+            placeholder="請選擇"
+            @change="cityChange()"
+          >
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
+              v-for="item in cityList"
+              :key="item.CityId"
+              :label="item.CityName"
+              :value="item.CityId"
+            ></el-option>
           </el-select>
         </div>
         <!-- 路选择框 -->
         <div class="registered_box_content_select">
           <p>路</p>
-          <el-select v-model="road" placeholder="請選擇">
+          <el-select v-model="CustAddrRoadId" placeholder="請選擇">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
+              v-for="item in roadList"
+              :key="item.RoadId"
+              :label="item.RoadName"
+              :value="item.RoadId"
+            ></el-option>
           </el-select>
         </div>
         <!-- 村 -->
@@ -88,7 +90,7 @@
         </div>
         <!-- 街 -->
         <div class="registered_box_content_input_smasll">
-          <el-input v-model="street" placeholder="弄"></el-input>
+          <el-input v-model="street" placeholder="街"></el-input>
         </div>
         <!-- 號 -->
         <div class="registered_box_content_input_smasll">
@@ -107,35 +109,34 @@
         <!-- 性別选择框 -->
         <div class="registered_box_content_select">
           <p>性別</p>
-          <el-select v-model="gender" placeholder="請選擇">
+          <el-select v-model="CustGender" placeholder="請選擇">
             <el-option
-              v-for="item in options"
+              v-for="item in CustGenderList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </div>
         <!-- 市話输入框 -->
         <div class="registered_box_content_input">
           <p>市話</p>
-          <el-input
-            v-model="LocalCalls"
-            placeholder="請輸入市區電話"
-          ></el-input>
+          <el-input v-model="CustTel" placeholder="請輸入市區電話"></el-input>
         </div>
         <!-- 生日选择框 -->
         <div class="registered_box_content_selects">
           <p>生日</p>
           <el-date-picker
-            v-model="valdataTimeue"
+            v-model="CustBirthdate"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
             type="date"
             placeholder="請選擇"
-          >
-          </el-date-picker>
+          ></el-date-picker>
         </div>
-        <button class="registered_box_content_button">立即註冊</button>
+        <button class="registered_box_content_button" @click="registered()">
+          立即註冊
+        </button>
       </div>
     </div>
     <!-- 底部申明 -->
@@ -143,6 +144,7 @@
   </div>
 </template>
 <script>
+import { CreateCustByLINE, getGetAddrCity, GetAddressRoad } from "@/api/api.js";
 import NavFooter from "@/components/NavFooter";
 export default {
   name: "registered",
@@ -151,32 +153,44 @@ export default {
   },
   data() {
     return {
-      options: [
+      CustGenderList: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: 1,
+          label: "男"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
+          value: 2,
+          label: "女"
         }
       ],
-      name: "",
-      phone: "",
-      arrds: "",
-      road: "",
+      options: [
+        {
+          value: "選項1",
+          label: "選項1"
+        },
+        {
+          value: "選項2",
+          label: "選項2"
+        },
+        {
+          value: "選項3",
+          label: "選項3"
+        },
+        {
+          value: "選項4",
+          label: "選項4"
+        },
+        {
+          value: "選項5",
+          label: "選項5"
+        }
+      ],
+      cityList: [],
+      roadList: [],
+      CustName: "",
+      CustMobile: this.$route.query.Phone,
+      CustAddrCityId: "",
+      CustAddrRoadId: "",
       village: "",
       ins: "",
       adjacent: "",
@@ -186,10 +200,119 @@ export default {
       numbers: "",
       floor: "",
       Ofs: "",
-      gender: "",
-      LocalCalls: "",
-      valdataTimeue: ""
+      CustGender: "",
+      CustTel: "",
+      CustBirthdate: ""
     };
+  },
+  created() {
+    this._getGetAddrCity();
+  },
+  methods: {
+    // 注册
+    registered() {
+      if (!this.CustName) {
+        return this.$message({
+          message: "姓名不能為空",
+          type: "warning"
+        });
+      }
+      if (!this.CustMobile) {
+        return this.$message({
+          message: "手機號碼不能為空",
+          type: "warning"
+        });
+      }
+      if (!this.CustAddrCityId) {
+        return this.$message({
+          message: "縣市地區不能為空",
+          type: "warning"
+        });
+      }
+      if (!this.CustAddrRoadId) {
+        return this.$message({
+          message: "路名不能為空",
+          type: "warning"
+        });
+      }
+      let CustAddrDetails =
+        this.village +
+        "村" +
+        this.ins +
+        "里" +
+        this.adjacent +
+        "鄰" +
+        this.lane +
+        "巷" +
+        this.dos +
+        "弄" +
+        this.street +
+        "街" +
+        this.numbers +
+        "號" +
+        this.floor +
+        "樓之" +
+        this.Ofs;
+      let form = {
+        CustName: this.CustName,
+        CustMobile: this.CustMobile,
+        CustAddrCityId: this.CustAddrCityId,
+        CustAddrRoadId: this.CustAddrRoadId,
+        CustAddrVil: "",
+        CustAddrDetail: CustAddrDetails,
+        LINEMID: this.$route.query.lineMid,
+        CustTel: this.CustTel,
+        CustGender: this.CustGender,
+        CustBirthdate: this.CustBirthdate,
+        InstallAddrCityId: "",
+        InstallAddrRoadId: "",
+        InstallAddrVil: ""
+      };
+      CreateCustByLINE(form).then(res => {
+        if (res.data.State) {
+          this.$message({
+            message: res.data.Msg,
+            type: "success"
+          });
+          this.$router.push("/sakuraMember");
+        } else {
+          this.$message({
+            message: res.data.Msg ? res.data.Msg : "註冊失敗請重試",
+            type: "error"
+          });
+        }
+      });
+    },
+    // 獲取縣市地區
+    _getGetAddrCity() {
+      getGetAddrCity().then(res => {
+        if (res.status == "success") {
+          this.cityList = res.data;
+        } else {
+          this.$message({
+            message: "獲取數據失敗",
+            type: "error"
+          });
+        }
+      });
+    },
+    // 縣市地區變動並獲取路名
+    cityChange() {
+      console.log(this.CustAddrCityId);
+      let form = {
+        addressCityId: this.CustAddrCityId
+      };
+      GetAddressRoad(form).then(res => {
+        if (res.status == "success") {
+          this.roadList = res.data;
+        } else {
+          this.$message({
+            message: "獲取數據失敗",
+            type: "error"
+          });
+        }
+      });
+    }
   }
 };
 </script>

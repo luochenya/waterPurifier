@@ -41,7 +41,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.$router.push("/PhoneVerification");
+      this.$router.push("/sakuraMember");
     }, 3000);
   }
 };

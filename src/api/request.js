@@ -1,9 +1,9 @@
 /** axios封装
  * 请求拦截、相应拦截、错误统一处理
  */
-import axios from 'axios'
-import QS from 'qs'
-import { domain } from './util.js'
+import axios from "axios";
+import QS from "qs";
+import { domain } from "./util.js";
 // import { Message } from 'element-ui'
 // import store from '../store/index'
 
@@ -20,14 +20,17 @@ import { domain } from './util.js'
 // axios.defaults.baseURL = 'https://partner.sakura.com.tw/'
 
 // ->1,模块一接口,url地址
-axios.defaults.baseM1URL = domain.Base_M1_URL
+axios.defaults.baseM1URL = domain.Base_M1_URL;
 // ->2,模块二接口,url地址
-axios.defaults.baseM2URL = domain.Base_M2_URL
+axios.defaults.baseM2URL = domain.Base_M2_URL;
+// ->2,模块二接口,url地址
+axios.defaults.baseM3URL = domain.Base_M3_URL;
 // 请求超时时间
-axios.defaults.timeout = 10000
+axios.defaults.timeout = 10000;
 
 // post请求头
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+axios.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded;charset=UTF-8";
 // axios.defaults.headers = {
 //   'Content-Type': 'application/x-www-form-urlencoded',
 //   Accept: 'application/json'
@@ -43,13 +46,13 @@ axios.interceptors.request.use(
     // const token = store.state.token
     // token && (config.headers.Authorization = token)
     // return config
-    if (config.url.includes('/GetMFNO')) {
-      config.headers['Content-Type'] = 'multipart/form-data'
+    if (config.url.includes("/GetMFNO")) {
+      config.headers["Content-Type"] = "multipart/form-data";
       // console.log('to')
       // console.log(config)
     }
     // console.log(config)
-    return config
+    return config;
   },
   error => {
     // console.log('333')
@@ -65,8 +68,9 @@ axios.interceptors.request.use(
 
     //   return Promise.resolve(error) // reject这个错误信息
     // }
-    return Promise.error(error)
-  })
+    return Promise.error(error);
+  }
+);
 
 // 响应拦截器
 /* axios.interceptors.response.use(
@@ -151,67 +155,83 @@ axios.interceptors.request.use(
  * @param {String} url [请求的url地址]
  * @param {Object} params [请求时携带的参数]
  */
-export function get (url, params) {
+export function get(url, params) {
   return new Promise((resolve, reject) => {
-    axios.get(url, {
-      params: params
-    })
+    axios
+      .get(url, {
+        params: params
+      })
       .then(res => {
-        resolve(res)
+        resolve(res);
       })
       .catch(err => {
-        reject(err)
-      })
-  })
+        reject(err);
+      });
+  });
 }
 /**
  * post方法，对应post请求
  * @param {String} url [请求的url地址]
  * @param {Object} params [请求时携带的参数]
  */
-function requireData (url, params, item) {
-  if (!url) return false
+function requireData(url, params, item) {
+  if (!url) return false;
   switch (item) {
     case 1:
-      url = axios.defaults.baseM1URL + url
-      break
+      url = axios.defaults.baseM1URL + url;
+      break;
     default:
-      url = axios.defaults.baseM2URL + url
+      url = axios.defaults.baseM2URL + url;
   }
   return new Promise((resolve, reject) => {
-    axios.post(url, QS.stringify(params))
+    axios
+      .post(url, QS.stringify(params))
       .then(res => {
-        resolve(res)
+        resolve(res);
       })
       .catch(err => {
-        reject(err)
-      })
-  })
+        reject(err);
+      });
+  });
 }
-function requireData2 (url, params, item) {
-  if (!url) return false
+
+function requireData2(url, params, item) {
+  if (!url) return false;
   switch (item) {
     case 1:
-      url = axios.defaults.baseM1URL + url
-      break
+      url = axios.defaults.baseM1URL + url;
+      break;
     default:
-      url = axios.defaults.baseM2URL + url
+      url = axios.defaults.baseM2URL + url;
   }
   return new Promise((resolve, reject) => {
-    axios.post(url, params)
+    axios
+      .post(url, params)
       .then(res => {
-        resolve(res)
+        resolve(res);
       })
       .catch(err => {
-        reject(err)
-      })
-  })
+        reject(err);
+      });
+  });
+}
+export function cascadePost(url, data) {
+  return new Promise((resolve, reject) => {
+    axios.post(axios.defaults.baseM3URL + url, QS.stringify(data)).then(
+      response => {
+        resolve(response.data);
+      },
+      err => {
+        reject(err);
+      }
+    );
+  });
 }
 // ->接口1的请求数据方法
-export function reqM1Service (url, params) {
-  return requireData.call(this, url, params, 1)
+export function reqM1Service(url, params) {
+  return requireData.call(this, url, params, 1);
 }
 // ->接口2的请求数据方法
-export function reqM2Service (url, params) {
-  return requireData2.call(this, url, params, 2)
+export function reqM2Service(url, params) {
+  return requireData2.call(this, url, params, 2);
 }

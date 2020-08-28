@@ -2,25 +2,21 @@
   <div class="to-upload">
     <el-card>
       <div class="content">
-        <div class="toUpload_content_button">確認</div>
+        <div class="toUpload_content_button" @click="determine()">確認</div>
         <el-row>
           <el-col :sm="24" :md="6" :lg="4">
             <div class="title">
               <h1>濾心{{ toViewDetails.Sequence }}號</h1>
               <span>Filter No. {{ toViewDetails.Sequence }}</span>
             </div>
-            <img src="../assets/img/Single_pipe@2x.png" alt="" />
+            <img src="../assets/img/Single_pipe@2x.png" alt />
           </el-col>
           <el-col :sm="18" :md="18" :lg="13">
             <div class="text">
               <h1>型號：{{ toViewDetails.FilterName }}</h1>
               <span>{{ toViewDetails.FilterDescription }}</span>
               <div class="inp" ref="refBtn">
-                <el-input
-                  maxlength="14"
-                  v-model="fileCode"
-                  placeholder="請輸入濾心編號"
-                ></el-input>
+                <el-input maxlength="14" v-model="fileCode" placeholder="請輸入濾心編號"></el-input>
                 <div class="btn">
                   上傳濾瓶QRCODE照
                   <input
@@ -35,22 +31,22 @@
             </div>
           </el-col>
           <el-col :sm="24" :md="24" :lg="7" class="sussecImg">
-            <img src="@/assets/imgs/sussec.png" alt="" />
+            <img src="@/assets/imgs/sussec.png" alt />
             我已閱讀完
             <em>濾心更換權益說明</em>
           </el-col>
         </el-row>
-        <div class="WhatFilterElement">
-          <img src="@/assets/imgs/questionMark.png" alt="" />
+        <div class="WhatFilterElement" @click="swiperStatus = true; WhatFilterStatus = 1">
+          <img src="@/assets/imgs/questionMark.png" alt />
           濾心編號是什麼？
         </div>
         <div class="toUpload_content_button_sussecImgs">
           <div class="sussecImgs">
-            <img src="@/assets/imgs/sussec.png" alt="" />
+            <img src="@/assets/imgs/sussec.png" alt />
             我已閱讀完
             <em>濾心更換權益說明</em>
           </div>
-          <div class="toUpload_content_buttons">確認</div>
+          <div class="toUpload_content_buttons" @click="determine()">確認</div>
         </div>
       </div>
     </el-card>
@@ -64,12 +60,12 @@
       >
         <div class="content">
           <div class="imgs">
-            <img src="../components/PopUp/img/update@2x (1).png" alt="" />
+            <img src="../components/PopUp/img/update@2x (1).png" alt />
           </div>
           <slot name="body"></slot>
           <h1>
-            您確定要更新此型號<em>{{ FilterModel }}</em
-            >的濾心嗎？
+            您確定要更新此型號
+            <em>{{ FilterModel }}</em>的濾心嗎？
           </h1>
           <div class="btn_1">
             <div @click="confirm">確認更換</div>
@@ -78,50 +74,21 @@
         </div>
       </el-dialog>
     </div>
-    <upload-pop-up
-      v-if="isShowUpload"
-      :pLeft="pTot"
-      :pBottom="pRight"
-      :btn="Uploadbtn"
-    ></upload-pop-up>
-    <guide-tow
-      :isDialogShow="isShowGuideTow"
-      modyType="4"
-      :noShowClick="isGuideTwoClick"
-    ></guide-tow>
-    <guide-tow
-      :isDialogShow="isShowGuideError"
-      modyType="5"
-      :noShowClick="isGuideErrorClick"
-    ></guide-tow>
-    <guide-tow
-      :isDialogShow="isShowGuidePrompt"
-      modyType="6"
-      :noShowClick="isGuidePromptClick"
-    ></guide-tow>
-    <guide-tow
-      :isDialogShow="isShowGuideCode"
-      modyType="7"
-      :noShowClick="isGuideCode"
-    >
+    <upload-pop-up v-if="isShowUpload" :pLeft="pTot" :pBottom="pRight" :btn="Uploadbtn"></upload-pop-up>
+    <guide-tow :isDialogShow="isShowGuideTow" modyType="4" :noShowClick="isGuideTwoClick"></guide-tow>
+    <guide-tow :isDialogShow="isShowGuideError" modyType="5" :noShowClick="isGuideErrorClick"></guide-tow>
+    <guide-tow :isDialogShow="isShowGuidePrompt" modyType="6" :noShowClick="isGuidePromptClick"></guide-tow>
+    <guide-tow :isDialogShow="isShowGuideCode" modyType="7" :noShowClick="isGuideCode">
       <template v-slot:body>
         <h1>查無濾心編號！</h1>
       </template>
     </guide-tow>
-    <guide-tow
-      :isDialogShow="isShowGuideMun"
-      modyType="7"
-      :noShowClick="isGuideCode"
-    >
+    <guide-tow :isDialogShow="isShowGuideMun" modyType="7" :noShowClick="isGuideCode">
       <template v-slot:body>
         <h1>請輸入13-14位編碼！</h1>
       </template>
     </guide-tow>
-    <guide-tow
-      :isDialogShow="isShowGuideCodeNo"
-      modyType="8"
-      :noShowClick="isGuideCode"
-    >
+    <guide-tow :isDialogShow="isShowGuideCodeNo" modyType="8" :noShowClick="isGuideCode">
       <template v-slot:body>
         <h1>{{ text }}</h1>
       </template>
@@ -132,13 +99,13 @@
     <div class="updateSwiperStyle" v-show="swiperStatus">
       <div class="updateSwiperStyle_box">
         <div class="updateSwiperStyle_close" @click="swiperStatusClose()">
-          <img src="@/assets/imgs/swiperClose.png" alt="" />
+          <img src="@/assets/imgs/swiperClose.png" alt />
         </div>
         <swiper :options="swiperOption">
           <swiper-slide v-for="(item, index) in swiperList" :key="index">
             <h1>{{ item.title }}</h1>
             <div class="updateSwiperStyle_box_img">
-              <img :src="item.img" alt="" />
+              <img :src="item.img" alt />
             </div>
             <h2>{{ item.content }}</h2>
             <h3 v-html="item.remarks"></h3>
@@ -151,19 +118,15 @@
     <div class="IndicatorPopupStyle" v-show="IndicatorPopupStatus">
       <div id="IndicatorPopupStyle_box">
         <div class="input">請輸入濾心編號</div>
-        <div class="btn">
-          上傳濾瓶QRCODE照
-        </div>
+        <div class="btn">上傳濾瓶QRCODE照</div>
         <div id="IndicatorPopupStyle_box_img">
-          <img src="@/assets/imgs/arrowRight.png" alt="" />
+          <img src="@/assets/imgs/arrowRight.png" alt />
           <div class="IndicatorPopupStyle_box_img_box">
             <h2>手動輸入濾心編號，或透通照片上傳辨識</h2>
             <div
               class="IndicatorPopupStyle_box_img_box_button"
               @click="IndicatorPopupStatus = false"
-            >
-              確認
-            </div>
+            >確認</div>
           </div>
         </div>
       </div>
@@ -182,7 +145,7 @@ export default {
   components: {
     UploadPopUp,
     GuideTow,
-    Loging
+    Loging,
   },
   data() {
     return {
@@ -192,28 +155,28 @@ export default {
         {
           title: "1.確認進水處已關閉",
           content: "更換濾心前，必須關閉進水三通球閥。",
-          img: require("@/assets/imgs/swiperOne.png")
+          img: require("@/assets/imgs/swiperOne.png"),
         },
         {
           title: "2.取出新購買的濾心",
           content: "找到濾心上的Qrcode，掃描輸入至濾心編號欄位(亦可手動輸入)。",
           img: require("@/assets/imgs/swiperTwo.png"),
           remarks:
-            "*濾心上是否有製造編號，並且再次確認型號與淨水器濾心道數是否一致!<br />*若查無濾心編號，請致電客服協助更新濾心週期。"
+            "*濾心上是否有製造編號，並且再次確認型號與淨水器濾心道數是否一致!<br />*若查無濾心編號，請致電客服協助更新濾心週期。",
         },
         {
           title: "3.拆換舊濾心",
           content: "將舊濾心拆下後，置換新的濾心即更換完成。",
-          img: require("@/assets/imgs/swiperTherr.png")
-        }
+          img: require("@/assets/imgs/swiperTherr.png"),
+        },
       ],
       swiperOption: {
         pagination: ".swiper-pagination", //这里修改
         pagination: {
-          el: ".swiper-pagination"
+          el: ".swiper-pagination",
         },
         grabCursor: true,
-        paginationClickable: true
+        paginationClickable: true,
       },
       FilterModel: "",
       confirmStatus: false,
@@ -232,7 +195,8 @@ export default {
       isShowGuideCode: false,
       isShowGuideMun: false,
       isShowGuideCodeNo: false,
-      text: ""
+      text: "",
+      WhatFilterStatus: 0,
     };
   },
   mounted() {
@@ -262,14 +226,18 @@ export default {
   methods: {
     // 关闭轮播弹窗并打开箭头弹窗
     swiperStatusClose() {
+      if (this.WhatFilterStatus == 1) {
+        this.swiperStatus = false;
+        return false;
+      }
       this.swiperStatus = false;
       this.IndicatorPopupStatus = true;
     },
     _getByProductId() {
       const { CustProdId } = this;
       getByProductId({
-        CustProdId
-      }).then(res => {
+        CustProdId,
+      }).then((res) => {
         this.toViewDetails = res.data.Data[0].Detail[this.Sequence - 1];
         if (!res.data.Data[0].IsOldWaterProduct) {
           this.isShowUpload = true;
@@ -351,7 +319,7 @@ export default {
       params.append("file", this.localFile);
       // console.log(params.get('file'))
       this.isShowLoging = true;
-      getDecodeQRCode(params).then(res => {
+      getDecodeQRCode(params).then((res) => {
         // console.log(res.data.State)
         // console.log(res.data.Data)
         if (!res.data.State) {
@@ -368,6 +336,7 @@ export default {
       });
     },
     determine() {
+      console.log(11111111);
       if (this.fileCode.length <= 0) {
         this.isShowGuidePrompt = true;
         return;
@@ -390,8 +359,8 @@ export default {
       getUpdateROFilter({
         ProductId: this.CustProdId,
         Sequence: this.Sequence,
-        Mfno: this.fileCode
-      }).then(res => {
+        Mfno: this.fileCode,
+      }).then((res) => {
         if (res.status === 200 && res.data.State) {
           this.isShowLoadging = false;
           this.isShowGuideTow = true;
@@ -407,7 +376,7 @@ export default {
       this.fileCode = "";
       this.$router.push({
         path: `/toView/${this.CustProdId}`,
-        query: { Sequence: this.Sequence }
+        query: { Sequence: this.Sequence },
       });
     },
     isGuideErrorClick() {
@@ -421,8 +390,8 @@ export default {
       this.isShowGuideCode = false;
       this.isShowGuideMun = false;
       this.isShowGuideCodeNo = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -555,14 +524,14 @@ export default {
       height: 26.2rem;
     }
     h2 {
-      text-align: left;
-      text-indent: 2em;
+      // text-align: left;
+      // text-indent: 2em;
       font-size: 1.1rem;
       color: rgba(134, 134, 134, 1);
       line-height: 2.2rem;
     }
     h3 {
-      text-align: left;
+      // text-align: left;
       font-size: 1.1rem;
       color: rgba(134, 134, 134, 1);
       line-height: 2.2rem;
@@ -596,16 +565,16 @@ export default {
   overflow: hidden;
   webkit-overflow: hidden;
   background-color: rgba(0, 0, 0, 0.6);
-  /deep/ .el-dialog__wrapper {
+  .el-dialog__wrapper {
     //  webkit-z-index: 9996!important;
     //  overflow: hidden;
     //  webkit-overflow: hidden;
   }
-  /deep/ .el-dialog {
+  .el-dialog {
     // z-index: 9999!important;
     width: 40rem;
     border-radius: 1.4rem !important;
-    /deep/ .el-dialog__body {
+    .el-dialog__body {
       padding: 0;
     }
     .content {
@@ -686,6 +655,7 @@ export default {
         color: rgba(255, 255, 255, 1);
         line-height: 4.6rem;
         text-align: center;
+        z-index: 30;
       }
       .sussecImg {
         font-size: 1.2rem;
@@ -785,10 +755,10 @@ export default {
             border: 0.1rem solid rgba(215, 216, 223, 1);
             border-right: none;
             box-sizing: border-box;
-            /deep/ .el-input {
+            .el-input {
               width: 16rem;
               font-size: 1.6rem;
-              /deep/ .el-input__inner {
+              .el-input__inner {
                 border: none;
                 height: 3.8rem;
               }
@@ -875,7 +845,7 @@ export default {
     }
     .el-col:nth-of-type(2) {
       padding-right: 1rem;
-      /deep/ .el-input__inner {
+      .el-input__inner {
         width: 100% !important;
       }
     }
@@ -896,17 +866,17 @@ export default {
       overflow: hidden;
       webkit-overflow: hidden;
       background-color: rgba(0, 0, 0, 0.6);
-      /deep/ .el-dialog__wrapper {
+      .el-dialog__wrapper {
         //  webkit-z-index: 9996!important;
         //  overflow: hidden;
         //  webkit-overflow: hidden;
       }
-      /deep/ .el-dialog {
+      .el-dialog {
         // z-index: 9999!important;
         width: 90%;
         margin: 0 auto;
         border-radius: 1.4rem !important;
-        /deep/ .el-dialog__body {
+        .el-dialog__body {
           padding: 0;
         }
         .content {

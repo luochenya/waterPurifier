@@ -21,7 +21,7 @@
         </el-col>
         <el-col :xs="24" :sm="16">
           <!-- <contact-customer-service></contact-customer-service>
-          <filter-to-view></filter-to-view> -->
+          <filter-to-view></filter-to-view>-->
           <div class="personalcenter-content" v-if="isShowUp">
             <personal-center
               :imgClick="imgClick"
@@ -77,6 +77,7 @@ export default {
     // 测试判断登录
     this.type =
       (this.$route.query && this.$route.query.type) || storage.getItem("type");
+    // (this.$route.query && this.$route.query.type) || storage.getItem("type");
     // 测试判断登录
 
     this.EncodeProductId =
@@ -86,21 +87,20 @@ export default {
       (this.$route.query && this.$route.query.mid) ||
       storage.getItem("LINEMid");
     // 原版代码
-    // if (!this.EncodeProductId) {
-    //   storage.setItem("LINEMid", this.LINEMid);
-    // } else {
-    //   storage.setItem("EncodeProductId", this.EncodeProductId);
-    // }
-    // 原版代码
-    // 测试判断登录
-    if (this.LINEMid) {
+    if (!this.EncodeProductId) {
       storage.setItem("LINEMid", this.LINEMid);
-    } else if (this.type) {
       storage.setItem("type", this.type);
-      this.$router.push("/lineBind");
     } else {
+      storage.setItem("type", this.type);
       storage.setItem("EncodeProductId", this.EncodeProductId);
     }
+    // 原版代码
+
+    // 测试判断登录
+    // if (this.type) {
+    //   storage.setItem("type", this.type);
+    //   this.$router.push("/lineBind");
+    // }
     // 测试判断登录
   },
   mounted() {

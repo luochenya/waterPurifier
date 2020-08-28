@@ -59,6 +59,7 @@ export default {
     _getCustomerByLineMid() {
       // const LINEMid = this.$cookie.get('LINEMid')
       const LINEMid = storage.getItem("LINEMid");
+      const type = storage.getItem("type");
       // console.log(LINEMid)
 
       getCustomerByLineMid({
@@ -68,6 +69,25 @@ export default {
         if (res.status === 200) {
           this.userName = res.data.Data;
           storage.setItem("userName", res.data.Data);
+          // 已綁定line
+          if (type == "line" && res.data.State) {
+            // 跳轉到已綁定頁面
+            this.$router.push({
+              path: `/lineBind`,
+              query: {
+                lineMid: LINEMid
+              }
+            });
+          } else if (type == "line" && !res.data.State) {
+            // 未綁定line
+            // 跳轉到手機獲取驗證碼頁面
+            this.$router.push({
+              path: `/PhoneVerification`,
+              query: {
+                lineMid: LINEMid
+              }
+            });
+          }
         }
       });
     },

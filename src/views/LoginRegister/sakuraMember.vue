@@ -1,17 +1,13 @@
 <template>
   <div class="sakuraMember">
     <!-- 顶部logo -->
-    <img
-      class="sakuraMember_loginLogo"
-      src="@/assets/imgs/loginLogo.png"
-      alt=""
-    />
+    <img class="sakuraMember_loginLogo" src="@/assets/imgs/loginLogo.png" alt />
     <!-- 中间内容 -->
     <div class="sakuraMember_box">
       <img
         class="sakuraMember_box_logo"
         src="@/assets/imgs/sakuraMemberLogo.png"
-        alt=""
+        alt
       />
       <h1 class="sakuraMember_box_h1">
         在登入成為淨水管家VIP前，您必須先確認您購買過台灣櫻花股份有限公司的淨水設備，並且執行過該產品之回
@@ -19,7 +15,7 @@
       </h1>
       <div class="sakuraMember_box_card">
         <div class="sakuraMember_box_card_header">
-          <img src="@/assets/imgs/sakuraMemberHeader.png" alt="" />
+          <img src="@/assets/imgs/sakuraMemberHeader.png" alt />
           <div>
             <p>王大寶您好</p>
             <span>淨水管家VIP用戶</span>
@@ -31,10 +27,10 @@
         <img
           class="sakuraMember_box_card_img"
           src="@/assets/imgs/sakuraMemberVip.png"
-          alt=""
+          alt
         />
       </div>
-      <button class="sakuraMember_box_button">
+      <button class="sakuraMember_box_button" @click="NextStepClick()">
         下一步
       </button>
       <p class="sakuraMember_box_p">您已經註冊為櫻花好友。不是您本人？</p>
@@ -44,19 +40,41 @@
   </div>
 </template>
 <script>
+import { getCustomerByLineMid } from "@/api/api";
 import NavFooter from "@/components/NavFooter";
+import storage from "../../storage";
 export default {
   name: "sakuraMember",
   components: {
     NavFooter
+  },
+  data() {
+    return {
+      LINEMid: storage.getItem("LINEMid")
+    };
+  },
+  methods: {
+    NextStepClick() {
+      storage.setItem("type", 1);
+      getCustomerByLineMid({
+        LINEMid: this.LINEMid
+      }).then(res => {
+        if (res.status === 200) {
+          this.$router.push("/");
+          storage.setItem("userName", res.data.Data);
+        }
+      });
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
 .sakuraMember {
+  position: relative;
   padding-top: 5rem;
   width: 100%;
-  height: 100%;
+  // height: 100%;
+  height: 108rem;
   background-image: url("../../assets/imgs/bottomImg.png");
   background-size: 100% 25rem;
   background-repeat: no-repeat;
@@ -166,6 +184,8 @@ export default {
 @media screen and (max-width: 992px) {
   .sakuraMember {
     background-size: 100% 30vh;
+    height: auto;
+    padding-bottom: 30vh;
     .sakuraMember_box {
       margin: 3rem auto 0;
       width: 90%;

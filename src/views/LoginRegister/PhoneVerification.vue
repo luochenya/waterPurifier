@@ -21,8 +21,10 @@
       <div class="PhoneVerification_box_input">
         <span>手機號碼</span>
         <input type="text" placeholder="請輸入手機號碼" v-model="Phone" />
-        <button v-show="!show">重新獲取{{ count }}s</button>
-        <button v-show="show" @click="getCode()">獲取驗證碼</button>
+        <button v-show="!show" @click="_getWATERVIPSentSMS()">
+          重新獲取{{ count }}s
+        </button>
+        <button v-show="show" @click="_getWATERVIPSentSMS()">獲取驗證碼</button>
       </div>
       <div class="PhoneVerification_box_input">
         <span>驗證碼</span>
@@ -45,6 +47,7 @@
   </div>
 </template>
 <script>
+import { getWATERVIPSentSMS, getWATERVIPVerifySMS } from "@/api/api.js";
 import NavFooter from "@/components/NavFooter";
 export default {
   name: "PhoneVerification",
@@ -58,24 +61,76 @@ export default {
       timer: null,
       Phone: "",
       VerificationCode: "",
-      VerificationCodeStatus: false
+      VerificationCodeStatus: false,
+      lineMid: this.$route.query.lineMid
     };
   },
   methods: {
     submit() {
-      if (
-        this.VerificationCode != "666666" &&
-        this.VerificationCode != "777777"
-      ) {
-        this.VerificationCodeStatus = true;
-      } else {
-        this.VerificationCodeStatus = false;
-        if (this.VerificationCode == "666666") {
-          this.$router.push("/sakuraMember");
-        } else {
-          this.$router.push("/registered");
-        }
+      if (!this.Phone) {
+        return this.$message({
+          message: "請輸入手機號碼",
+          type: "warning"
+        });
       }
+      if (!this.VerificationCode) {
+        return this.$message({
+          message: "請輸入驗證碼",
+          type: "warning"
+        });
+      }
+      var form = {
+        Mobile: this.Phone,
+        Code: this.VerificationCode
+      };
+      getWATERVIPVerifySMS(form).then(res => {
+        if (res.data.State) {
+          this.$message({
+            message: res.data.Result,
+            type: "success"
+          });
+          this.$router.push({
+            path: `/registered`,
+            query: {
+              Phone: this.Phone,
+              lineMid: this.lineMid
+            }
+          });
+        } else {
+          this.$message({
+            message: res.data.Result,
+            type: "error"
+          });
+        }
+      });
+    },
+    _getWATERVIPSentSMS() {
+      if (!this.Phone) {
+        return this.$message({
+          message: "請輸入手機號碼",
+          type: "warning"
+        });
+      }
+      var form = {
+        Mobile: this.Phone,
+        Source: "LINE綁定"
+      };
+      getWATERVIPSentSMS(form).then(res => {
+        if (res.data.State) {
+          clearInterval(this.timer);
+          this.timer = null;
+          this.getCode();
+          this.$message({
+            message: res.data.Result,
+            type: "success"
+          });
+        } else {
+          this.$message({
+            message: res.data.Result,
+            type: "error"
+          });
+        }
+      });
     },
     // 验证码倒计时
     getCode() {
