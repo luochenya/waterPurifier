@@ -133,24 +133,24 @@
 </template>
 
 <script>
-import GuideFour from "@/components/PopUp/Guide_4";
-import Loging from "@/components/PopUp/loging";
-import { getByProductId, getFilterChangeHistory } from "../api/api";
+import GuideFour from '@/components/PopUp/Guide_4'
+import Loging from '@/components/PopUp/loging'
+import { getByProductId, getFilterChangeHistory } from '../api/api'
 
 export default {
-  name: "filter-to-view",
+  name: 'filter-to-view',
   components: {
     GuideFour,
     Loging
   },
-  data() {
+  data () {
     return {
       isShowLoadging: true,
       isShowGuideFour: false,
       isShowLoging: false,
       isShowVarning: false,
       toViewDetails: {},
-      CustProdId: "",
+      CustProdId: '',
       Sequence: 0,
       orderHistory: {},
       IsOriginalService: false,
@@ -160,119 +160,126 @@ export default {
         vuescroll: {},
         scrollPanel: {},
         rail: {
-          background: "#01a99a",
+          background: '#01a99a',
           opacity: 0,
-          size: "10px",
+          size: '10px',
           specifyBorderRadius: false,
           gutterOfEnds: null, // 轨道距 x 和 y 轴两端的距离
-          gutterOfSide: "0", // 距离容器的距离
+          gutterOfSide: '0', // 距离容器的距离
           keepShow: false, // 是否即使 bar 不存在的情况下也保持显示
-          border: "none" // 边框
+          border: 'none' // 边框
         },
         bar: {
           hoverStyle: true,
           onlyShowBarOnScroll: false, // 是否只有滚动的时候才显示滚动条
-          background: "#E6E6E6" // 颜色
+          background: '#E6E6E6' // 颜色
         }
       }
-    };
-  },
-  computed: {
-    isRemainLife() {
-      return +(this.toViewDetails.RemainLife || "").substring(
-        0,
-        (this.toViewDetails.RemainLife || "").length - 1
-      );
     }
   },
-  mounted() {
-    this.CustProdId = this.$route.params && this.$route.params.id;
-    this.Sequence = this.$route.query && this.$route.query.Sequence;
+  computed: {
+    isRemainLife () {
+      return +(this.toViewDetails.RemainLife || '').substring(
+        0,
+        (this.toViewDetails.RemainLife || '').length - 1
+      )
+    }
+  },
+  mounted () {
+    this.CustProdId = this.$route.params && this.$route.params.id
+    this.Sequence = this.$route.query && this.$route.query.Sequence
     // this.toViewDetails = this.$route.params.list
     // this.ProductId = this.$route.params.CustProdId
     // console.log('p', this.ProductId)
     // console.log('s', this.Sequence)
     // console.log('t', this.toViewDetails.Sequence)
-    this._getByProductId();
-    this._getOrderHistory();
+    this._getByProductId()
+    this._getOrderHistory()
   },
   methods: {
-    _getByProductId() {
-      const { CustProdId } = this;
+    _getByProductId () {
+      const { CustProdId } = this
       getByProductId({
         CustProdId
       }).then(res => {
-        this.IsOriginalService = res.data.Data[0].IsOriginalService;
-        this.toViewDetails = res.data.Data[0].Detail[this.Sequence - 1];
-        this.IsOldWaterProduct = res.data.Data[0].IsOldWaterProduct;
+        // this.IsOriginalService = res.data.Data[0].IsOriginalService
+        // 2020/9/15更改
+        this.IsOriginalService = res.data.Data[0].IsOldWaterProduct
+        // this.toViewDetails = res.data.Data[0].Detail[this.Sequence - 1]
+        res.data.Data[0].Detail.forEach((item, index) => {
+          if (this.Sequence == item.Sequence) {
+            this.toViewDetails = item
+          }
+        })
+        this.IsOldWaterProduct = res.data.Data[0].IsOldWaterProduct
         // console.log('ss', this.IsOldWaterProduct)
         // console.log(this.toViewDetails)
-        this.isShowLoadging = false;
-      });
+        this.isShowLoadging = false
+      })
     },
-    _getOrderHistory() {
-      const ProductId = this.CustProdId;
+    _getOrderHistory () {
+      const ProductId = this.CustProdId
       getFilterChangeHistory({
         ProductId
       }).then(res => {
         // console.log('gg', res.data.Data[this.Sequence])
-        this.orderHistory = res.data.Data[this.Sequence];
+        this.orderHistory = res.data.Data[this.Sequence]
         // console.log(res.data.Data)
-      });
+      })
     },
-    btnClick() {
+    btnClick () {
       this.$router.push({
-        path: "/upload",
+        path: '/upload',
         query: { CustProdId: this.CustProdId, Sequence: this.Sequence }
-      });
+      })
       // this.isShowGuideFour = true
     },
     // 确认
-    confirmClick() {
-      this.isShowGuideFour = false;
-      this.isShowLoging = true;
+    confirmClick () {
+      this.isShowGuideFour = false
+      this.isShowLoging = true
       setTimeout(() => {
-        this.isShowLoging = false;
-        this.isShowVarning = true;
-      }, 2000);
+        this.isShowLoging = false
+        this.isShowVarning = true
+      }, 2000)
     },
     // 取消
-    noClick() {
-      this.isShowGuideFour = false;
+    noClick () {
+      this.isShowGuideFour = false
     },
     // 已購買
-    varningNoClick() {
+    varningNoClick () {
       // this.isShowVarning = false
       this.$router.push({
-        path: "/upload",
+        path: '/upload',
         query: { CustProdId: this.CustProdId, Sequence: this.Sequence }
-      });
+      })
     },
     // 購買濾心
-    varningConfirmClick() {
-      this.isShowVarning = false;
-      this.$router.push({ name: "YourDealer" });
+    varningConfirmClick () {
+      this.isShowVarning = false
+      this.$router.push({ name: 'YourDealer' })
     },
     // 去购买
-    goBuy() {
+    goBuy () {
       if (this.IsOriginalService) {
         // console.log(this.IsOriginalService)
-        this.$router.push({ path: "/service" });
+        this.$router.push({ path: '/service' })
       } else {
         if (!this.IsOldWaterProduct) {
-          this.type = 2;
+          this.type = 2
         } else {
-          this.type = 1;
+          this.type = 1
         }
         // console.log(this.type)
         this.$router.push({
-          path: "/yourDealer",
+          path: '/yourDealer',
           query: { ProductId: this.CustProdId, type: this.type }
-        });
+        })
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

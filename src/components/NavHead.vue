@@ -22,7 +22,7 @@
              enter-active-class="fadeInRightBig"
              leave-active-class="slideOutRight">
               <!-- fast   slideOutRight normal-->
-            <div class="unfold" v-show="isShow">
+            <div class="unfold" v-show="isShow" style="animation-duration: 0.3s">
               <mobile-app tex-color="#fff" :gotoMyProduct="goMyProduct" :gotolink="golink" :isMessageSolid="goAlerts"></mobile-app>
             </div>
             </transition>
