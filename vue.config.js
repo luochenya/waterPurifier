@@ -22,7 +22,6 @@ module.exports = {
         moment: 'moment',
         lodash: '_'
       })
-
       config.plugin('html').tap(args => {
         args[0].isProd = true
         return args
